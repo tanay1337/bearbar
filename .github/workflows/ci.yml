@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential \
+            libglib2.0-dev \
+            libgtk-4-dev \
+            libgtk4-layer-shell-dev \
+            libpulse-dev \
+            pkg-config
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@1.92
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache Rust build data
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run Clippy
+        run: cargo clippy --locked --all-targets --all-features -- -D warnings
+
+      - name: Run tests
+        run: cargo test --locked --all-targets
+
+      - name: Build release binary
+        run: cargo build --release --locked

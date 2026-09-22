@@ -1,0 +1,15 @@
+pub mod battery;
+pub mod clipboard;
+pub mod clock;
+pub mod control_center;
+pub mod custom;
+pub mod focused;
+pub mod hardware;
+pub mod launcher;
+pub mod media;
+pub mod menu;
+pub mod notifications;
+pub mod privacy;
+pub mod tray;
+pub mod volume;
+pub mod workspaces;

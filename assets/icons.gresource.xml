@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/dev/bearbar/icons/scalable/actions">
+    <file alias="bearbar-logo-symbolic.svg">icons/bearbar-logo-symbolic.svg</file>
+    <file alias="bearbar-control-center-symbolic.svg">icons/bearbar-control-center-symbolic.svg</file>
+    <file alias="bearbar-volume-muted-symbolic.svg">icons/bearbar-volume-muted-symbolic.svg</file>
+    <file alias="bearbar-volume-low-symbolic.svg">icons/bearbar-volume-low-symbolic.svg</file>
+    <file alias="bearbar-volume-medium-symbolic.svg">icons/bearbar-volume-medium-symbolic.svg</file>
+    <file alias="bearbar-volume-high-symbolic.svg">icons/bearbar-volume-high-symbolic.svg</file>
+    <file alias="bearbar-bluetooth-symbolic.svg">icons/bearbar-bluetooth-symbolic.svg</file>
+    <file alias="bearbar-battery-empty-symbolic.svg">icons/bearbar-battery-empty-symbolic.svg</file>
+    <file alias="bearbar-battery-low-symbolic.svg">icons/bearbar-battery-low-symbolic.svg</file>
+    <file alias="bearbar-battery-half-symbolic.svg">icons/bearbar-battery-half-symbolic.svg</file>
+    <file alias="bearbar-battery-good-symbolic.svg">icons/bearbar-battery-good-symbolic.svg</file>
+    <file alias="bearbar-battery-full-symbolic.svg">icons/bearbar-battery-full-symbolic.svg</file>
+    <file alias="bearbar-battery-charging-symbolic.svg">icons/bearbar-battery-charging-symbolic.svg</file>
+    <file alias="bearbar-wifi-none-symbolic.svg">icons/bearbar-wifi-none-symbolic.svg</file>
+    <file alias="bearbar-wifi-low-symbolic.svg">icons/bearbar-wifi-low-symbolic.svg</file>
+    <file alias="bearbar-wifi-medium-symbolic.svg">icons/bearbar-wifi-medium-symbolic.svg</file>
+    <file alias="bearbar-wifi-high-symbolic.svg">icons/bearbar-wifi-high-symbolic.svg</file>
+    <file alias="bearbar-lock-symbolic.svg">icons/bearbar-lock-symbolic.svg</file>
+    <file alias="bearbar-check-symbolic.svg">icons/bearbar-check-symbolic.svg</file>
+    <file alias="bearbar-paired-symbolic.svg">icons/bearbar-paired-symbolic.svg</file>
+    <file alias="bearbar-temperature-symbolic.svg">icons/bearbar-temperature-symbolic.svg</file>
+    <file alias="bearbar-memory-symbolic.svg">icons/bearbar-memory-symbolic.svg</file>
+    <file alias="bearbar-cpu-symbolic.svg">icons/bearbar-cpu-symbolic.svg</file>
+  </gresource>
+</gresources>

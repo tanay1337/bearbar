@@ -1,0 +1,819 @@
+* {
+  --bearbar-bg: rgba(24, 24, 27, 0.78);
+  --bearbar-fg: rgba(255, 255, 255, 0.92);
+  --bearbar-muted: rgba(255, 255, 255, 0.58);
+  --bearbar-hover: rgba(255, 255, 255, 0.10);
+  --bearbar-active: rgba(255, 255, 255, 0.20);
+  --bearbar-border: rgba(255, 255, 255, 0.12);
+  --bearbar-accent: #8bb8ff;
+  --bearbar-warning: #ffcc66;
+  --bearbar-critical: #ff6b78;
+  --bearbar-card: rgba(255, 255, 255, 0.075);
+  --bearbar-card-border: rgba(255, 255, 255, 0.09);
+  --cyber-cyan: #60dbff;
+  --cyber-cyan-dim: rgba(96, 219, 255, 0.22);
+  --cyber-violet: #bf8cff;
+}
+
+window#bearbar-window,
+window#bearbar-window.background {
+  background: transparent;
+  color: var(--bearbar-fg);
+}
+
+#bar {
+  padding: 0 9px;
+  color: var(--bearbar-fg);
+  background-color: var(--bearbar-bg);
+  border-bottom: 1px solid var(--bearbar-border);
+  font-family: Inter, "Noto Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#bar.edge-bottom {
+  border-top: 1px solid var(--bearbar-border);
+  border-bottom: 0;
+}
+
+#bar.edge-left {
+  padding: 9px 0;
+  border-right: 1px solid var(--bearbar-border);
+  border-bottom: 0;
+}
+
+#bar.edge-right {
+  padding: 9px 0;
+  border-bottom: 0;
+  border-left: 1px solid var(--bearbar-border);
+}
+
+#bar.edge-left .module,
+#bar.edge-left button.module,
+#bar.edge-right .module,
+#bar.edge-right button.module {
+  margin: 2px 0;
+  padding: 0 3px;
+}
+
+#bar.edge-left #clock,
+#bar.edge-left #volume,
+#bar.edge-left #battery,
+#bar.edge-right #clock,
+#bar.edge-right #volume,
+#bar.edge-right #battery {
+  padding: 0 3px;
+}
+
+#bar.edge-left #workspaces,
+#bar.edge-right #workspaces {
+  margin: 0;
+  padding: 0;
+}
+
+#bar.edge-left #workspaces button.workspace,
+#bar.edge-right #workspaces button.workspace {
+  min-width: 24px;
+  padding: 0;
+}
+
+#bar.edge-left .hardware-details,
+#bar.edge-right .hardware-details {
+  padding: 2px 0;
+}
+
+.module,
+.module > button,
+button.module {
+  min-height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
+  color: inherit;
+  background: transparent;
+  box-shadow: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.module,
+button.module {
+  margin: 0 2px;
+}
+
+.module > button {
+  margin: 0;
+  padding: 0;
+}
+
+.module:hover,
+.module > button:hover,
+button.module:hover,
+button.workspace:hover {
+  background-color: var(--bearbar-hover);
+}
+
+#workspaces {
+  padding: 0 2px;
+}
+
+button.workspace {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--bearbar-muted);
+  background: transparent;
+  box-shadow: none;
+  transition: min-width 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+button.workspace.occupied {
+  color: var(--bearbar-fg);
+}
+
+button.workspace.visible {
+  background-color: rgba(255, 255, 255, 0.09);
+}
+
+button.workspace.active {
+  min-width: 31px;
+  color: white;
+  background-color: var(--bearbar-active);
+}
+
+button.workspace.urgent {
+  color: white;
+  background-color: rgba(255, 107, 120, 0.72);
+}
+
+.clock-label {
+  font-variant-numeric: tabular-nums;
+}
+
+.module-icon {
+  font-size: 15px;
+}
+
+.hardware-details {
+  padding: 0 2px;
+}
+
+.hardware-metric {
+  font-variant-numeric: tabular-nums;
+}
+
+#temperature {
+  color: #8bb8ff;
+}
+
+#memory {
+  color: #c7a7ff;
+}
+
+#cpu {
+  color: #ee9baa;
+}
+
+.dim-label,
+.empty,
+.muted,
+.unavailable,
+.disconnected {
+  color: var(--bearbar-muted);
+}
+
+.battery.warning {
+  color: var(--bearbar-warning);
+}
+
+.battery.critical {
+  color: var(--bearbar-critical);
+}
+
+.battery.charging {
+  color: var(--bearbar-accent);
+}
+
+popover > contents {
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 15px;
+  color: var(--bearbar-fg);
+  background-color: rgba(13, 17, 24, 0.985);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.58),
+              0 2px 8px rgba(0, 0, 0, 0.38),
+              inset 0 1px rgba(255, 255, 255, 0.07);
+}
+
+popover > arrow {
+  border-color: rgba(255, 255, 255, 0.13);
+  background-color: #0d1118;
+}
+
+.popover-contents {
+  padding: 12px;
+  font-family: Inter, "Noto Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.control-center,
+.metric-panel {
+  min-width: 252px;
+}
+
+#focused {
+  color: rgba(240, 191, 227, 0.90);
+}
+
+#submap,
+#keyboard,
+#privacy {
+  color: var(--cyber-cyan);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+#privacy {
+  color: #ff7d91;
+  background-color: rgba(255, 87, 111, 0.10);
+}
+
+#media {
+  color: rgba(232, 239, 247, 0.86);
+}
+
+#menu {
+  min-width: 24px;
+  padding: 0 5px;
+  color: rgba(255, 255, 255, 0.93);
+}
+
+#control-center {
+  color: rgba(215, 238, 248, 0.90);
+}
+
+.control-center-panel,
+.media-panel {
+  min-width: 300px;
+}
+
+.volume-popover .control-center {
+  min-width: 240px;
+}
+
+.control-center-panel {
+  padding: 12px;
+}
+
+.connectivity-card {
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.032);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.022);
+}
+
+.connectivity-header {
+  min-height: 42px;
+  min-width: 0;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 9px;
+  color: rgba(237, 244, 249, 0.90);
+  background: transparent;
+  box-shadow: none;
+}
+
+.connectivity-header:hover {
+  background-color: rgba(96, 219, 255, 0.055);
+}
+
+.connectivity-switch {
+  min-width: 13px;
+  min-height: 13px;
+  margin: 0;
+  padding: 2px 16px 2px 2px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  transition: padding 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.connectivity-switch:checked {
+  padding: 2px 2px 2px 16px;
+  border-color: rgba(96, 219, 255, 0.72);
+  background: rgba(96, 219, 255, 0.72);
+}
+
+.connectivity-switch-knob {
+  min-width: 13px;
+  min-height: 13px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(242, 247, 250, 0.94);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.36);
+}
+
+.connection-list {
+  padding: 2px 5px 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.connection-row {
+  min-height: 29px;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 7px;
+  color: rgba(221, 231, 238, 0.82);
+  background: transparent;
+  box-shadow: none;
+}
+
+.connection-row:hover,
+.connection-row.active {
+  color: white;
+  background-color: rgba(96, 219, 255, 0.075);
+}
+
+.connection-row.active {
+  box-shadow: inset 2px 0 rgba(96, 219, 255, 0.76);
+}
+
+.connection-empty {
+  min-height: 29px;
+  padding: 2px 7px;
+  color: rgba(157, 176, 190, 0.58);
+  font-size: 11px;
+}
+
+.connection-icon,
+.connection-indicators image {
+  color: rgba(126, 222, 243, 0.86);
+}
+
+.connection-indicators {
+  color: rgba(145, 218, 235, 0.82);
+}
+
+.connection-battery {
+  color: rgba(164, 190, 204, 0.70);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.wifi-password {
+  padding: 7px 6px 2px;
+}
+
+.wifi-password entry {
+  min-height: 29px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 7px;
+  color: rgba(245, 249, 252, 0.92);
+  background-color: rgba(255, 255, 255, 0.045);
+  box-shadow: none;
+}
+
+.connect-button {
+  min-height: 29px;
+  padding: 0 9px;
+  border: 1px solid rgba(96, 219, 255, 0.26);
+  border-radius: 7px;
+  color: #7ce6ff;
+  background-color: rgba(96, 219, 255, 0.08);
+  box-shadow: none;
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.control-tile {
+  min-height: 58px;
+  padding: 10px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 11px;
+  color: rgba(237, 244, 249, 0.90);
+  background-color: rgba(255, 255, 255, 0.038);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+button.control-tile:hover,
+button.control-tile:checked {
+  border-color: rgba(96, 219, 255, 0.22);
+  background-color: rgba(96, 219, 255, 0.09);
+}
+
+button.control-tile:checked {
+  box-shadow: inset 2px 0 #60dbff;
+}
+
+.control-caption,
+.row-meta {
+  color: rgba(157, 176, 190, 0.62);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+}
+
+.tile-value {
+  color: rgba(244, 248, 252, 0.92);
+  font-size: 12px;
+  font-weight: 590;
+}
+
+.control-reading {
+  color: rgba(133, 213, 232, 0.82);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.profile-control,
+.wide-control,
+.media-control {
+  min-height: 27px;
+  padding: 0 7px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 8px;
+  color: rgba(190, 207, 219, 0.70);
+  background-color: rgba(255, 255, 255, 0.035);
+  box-shadow: none;
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+.profile-control:hover,
+.wide-control:hover,
+.media-control:hover {
+  color: rgba(247, 252, 255, 0.96);
+  border-color: rgba(96, 219, 255, 0.22);
+  background-color: rgba(96, 219, 255, 0.08);
+}
+
+.profile-control:checked,
+.wide-control:checked {
+  color: #081115;
+  border-color: #69d9f5;
+  background-color: #69d9f5;
+}
+
+.device-row,
+.window-row,
+.app-row,
+.clipboard-row,
+.tray-menu-item {
+  min-height: 35px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: rgba(231, 238, 244, 0.88);
+  background: transparent;
+  box-shadow: none;
+}
+
+.device-row:hover,
+.window-row:hover,
+.app-row:hover,
+.clipboard-row:hover,
+.tray-menu-item:hover {
+  color: white;
+  border-color: rgba(96, 219, 255, 0.11);
+  background-color: rgba(96, 219, 255, 0.07);
+}
+
+.window-row.active {
+  background-color: rgba(96, 219, 255, 0.08);
+  box-shadow: inset 2px 0 rgba(96, 219, 255, 0.85);
+}
+
+.app-badge {
+  min-width: 25px;
+  min-height: 25px;
+  border: 1px solid rgba(96, 219, 255, 0.17);
+  border-radius: 7px;
+  color: #86e3f8;
+  background-color: rgba(96, 219, 255, 0.08);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.window-panel,
+.clipboard-panel {
+  min-width: 310px;
+}
+
+.app-menu-panel {
+  min-width: 340px;
+}
+
+.app-menu-panel searchentry {
+  min-height: 35px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  color: rgba(244, 248, 252, 0.94);
+  background-color: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.clipboard-row {
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 10px;
+}
+
+.tray {
+  margin: 0 1px;
+}
+
+.tray-item {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--bearbar-fg);
+  background: transparent;
+  box-shadow: none;
+}
+
+.tray-item:hover {
+  background-color: var(--bearbar-hover);
+}
+
+.tray-item.attention {
+  color: #ff8a9c;
+  background-color: rgba(255, 107, 120, 0.10);
+}
+
+.tray-menu {
+  min-width: 220px;
+  padding: 7px;
+}
+
+.tray-menu-item {
+  min-height: 29px;
+  padding: 2px 9px;
+}
+
+.media-title {
+  color: rgba(248, 251, 255, 0.96);
+  font-size: 15px;
+  font-weight: 620;
+}
+
+.media-artist,
+.media-album {
+  color: rgba(177, 195, 208, 0.68);
+}
+
+.profile-group {
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 9px;
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+.media-album {
+  font-size: 11px;
+}
+
+.panel-header {
+  padding: 1px 2px;
+}
+
+.panel-kicker {
+  color: rgba(96, 219, 255, 0.82);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+}
+
+.volume-popover .panel-kicker {
+  color: rgba(116, 228, 205, 0.86);
+}
+
+.battery-popover .panel-kicker,
+#memory .panel-kicker {
+  color: rgba(196, 158, 255, 0.86);
+}
+
+#temperature .panel-kicker {
+  color: rgba(131, 184, 255, 0.88);
+}
+
+#cpu .panel-kicker {
+  color: rgba(238, 155, 170, 0.88);
+}
+
+.panel-title {
+  color: rgba(247, 250, 255, 0.94);
+  font-size: 13px;
+  font-weight: 580;
+}
+
+.panel-value {
+  color: rgba(248, 252, 255, 0.98);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 23px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+
+.control-card {
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 11px;
+  background-color: rgba(255, 255, 255, 0.038);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+.mute-control {
+  min-height: 31px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  color: rgba(230, 239, 244, 0.68);
+  background-color: rgba(255, 255, 255, 0.045);
+  box-shadow: none;
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+}
+
+.mute-control:hover {
+  color: rgba(255, 255, 255, 0.96);
+  border-color: rgba(96, 219, 255, 0.22);
+  background-color: rgba(96, 219, 255, 0.09);
+}
+
+.mute-control:checked {
+  color: #071015;
+  border-color: rgba(96, 219, 255, 0.75);
+  background-color: #69d9f5;
+  box-shadow: 0 4px 16px rgba(96, 219, 255, 0.14);
+}
+
+.calendar-panel {
+  min-width: 268px;
+}
+
+calendar {
+  padding: 1px;
+  border: 0;
+  background: transparent;
+}
+
+calendar > header {
+  padding: 0 1px 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  background: transparent;
+}
+
+calendar > header > button {
+  min-width: 27px;
+  min-height: 27px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: rgba(235, 244, 250, 0.78);
+  background: transparent;
+  box-shadow: none;
+}
+
+calendar > header > button:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+calendar > header > label {
+  color: rgba(247, 250, 255, 0.92);
+  font-size: 13px;
+  font-weight: 620;
+}
+
+calendar > grid > label {
+  min-width: 32px;
+  min-height: 29px;
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+}
+
+calendar > grid > label.day-name {
+  color: rgba(168, 181, 198, 0.58);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+calendar > grid > label.day-number:hover {
+  color: rgba(225, 250, 255, 0.98);
+  background-color: rgba(96, 219, 255, 0.09);
+}
+
+calendar > grid > label.day-number:selected {
+  color: #071016;
+  background-color: #73d9ef;
+  box-shadow: 0 4px 14px rgba(75, 194, 222, 0.20);
+}
+
+.power-panel {
+  min-width: 252px;
+}
+
+.power-stats,
+.panel-details {
+  color: rgba(200, 215, 224, 0.62);
+  font-family: "JetBrains Mono", "Noto Sans Mono", monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+}
+
+.detail-primary {
+  color: rgba(224, 236, 242, 0.78);
+}
+
+.detail-secondary {
+  color: rgba(177, 194, 205, 0.54);
+}
+
+progressbar.charge-meter trough,
+progressbar.metric-meter trough {
+  min-height: 6px;
+  border-radius: 999px;
+  background-color: rgba(184, 211, 220, 0.10);
+}
+
+progressbar.charge-meter progress,
+progressbar.metric-meter progress {
+  border-radius: 999px;
+  background-color: #73d9ef;
+  box-shadow: 0 0 10px rgba(96, 219, 255, 0.16);
+}
+
+.battery-popover progressbar.charge-meter progress,
+#memory progressbar.metric-meter progress {
+  background-color: #bd93f9;
+  box-shadow: 0 0 10px rgba(189, 147, 249, 0.15);
+}
+
+#temperature progressbar.metric-meter progress {
+  background-color: #83b8ff;
+  box-shadow: 0 0 10px rgba(131, 184, 255, 0.15);
+}
+
+#cpu progressbar.metric-meter progress {
+  background-color: #ee9baa;
+  box-shadow: 0 0 10px rgba(238, 155, 170, 0.15);
+}
+
+.battery.warning progressbar.charge-meter progress {
+  background-color: var(--bearbar-warning);
+}
+
+.battery.critical progressbar.charge-meter progress {
+  background-color: var(--bearbar-critical);
+}
+
+scale trough {
+  min-height: 6px;
+  border-radius: 999px;
+  background-color: rgba(184, 211, 220, 0.11);
+}
+
+scale highlight {
+  border-radius: 999px;
+  background-color: #73d9ef;
+  box-shadow: 0 0 9px rgba(96, 219, 255, 0.17);
+}
+
+scale slider {
+  min-width: 14px;
+  min-height: 14px;
+  border: 2px solid rgba(225, 249, 255, 0.90);
+  border-radius: 999px;
+  background-color: #73d9ef;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.34);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0ms;
+    animation-duration: 0ms;
+  }
+}

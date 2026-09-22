@@ -1,0 +1,14 @@
+/target/
+
+.env
+.env.*
+.direnv/
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+*.log
