@@ -25,9 +25,31 @@ jobs:
             build-essential \
             libglib2.0-dev \
             libgtk-4-dev \
-            libgtk4-layer-shell-dev \
             libpulse-dev \
+            libwayland-dev \
+            meson \
+            ninja-build \
+            wayland-protocols \
             pkg-config
+
+      - name: Build GTK4 Layer Shell
+        run: |
+          git clone --depth 1 --branch v1.3.0 \
+            https://github.com/wmww/gtk4-layer-shell.git \
+            "$RUNNER_TEMP/gtk4-layer-shell"
+          meson setup \
+            "$RUNNER_TEMP/gtk4-layer-shell/build" \
+            "$RUNNER_TEMP/gtk4-layer-shell" \
+            --buildtype=release \
+            --prefix=/usr \
+            -Ddocs=false \
+            -Dexamples=false \
+            -Dintrospection=false \
+            -Dtests=false \
+            -Dvapi=false
+          meson compile -C "$RUNNER_TEMP/gtk4-layer-shell/build"
+          sudo meson install -C "$RUNNER_TEMP/gtk4-layer-shell/build"
+          sudo ldconfig
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@1.92

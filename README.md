@@ -19,11 +19,27 @@ Install the build and runtime dependencies on Arch Linux:
 sudo pacman -S --needed base-devel rust gtk4 gtk4-layer-shell libpulse upower
 ```
 
-On Ubuntu 24.04 or newer:
+On Ubuntu 26.04 or newer:
 
 ```sh
 sudo apt install build-essential libglib2.0-dev libgtk-4-dev \
   libgtk4-layer-shell-dev libpulse-dev pkg-config upower
+```
+
+Ubuntu 24.04 provides the GTK4 Layer Shell runtime but not its development
+package. Install the remaining dependencies and build GTK4 Layer Shell first:
+
+```sh
+sudo apt install build-essential libglib2.0-dev libgtk-4-dev libpulse-dev \
+  libwayland-dev meson ninja-build pkg-config upower wayland-protocols
+git clone --depth 1 --branch v1.3.0 \
+  https://github.com/wmww/gtk4-layer-shell.git
+meson setup gtk4-layer-shell/build gtk4-layer-shell --buildtype=release \
+  --prefix=/usr -Ddocs=false -Dexamples=false -Dintrospection=false \
+  -Dtests=false -Dvapi=false
+meson compile -C gtk4-layer-shell/build
+sudo meson install -C gtk4-layer-shell/build
+sudo ldconfig
 ```
 
 Use [rustup](https://rustup.rs/) if your distribution does not provide Rust
