@@ -112,18 +112,19 @@ pub fn build(
     revealer.set_child(Some(&details));
     revealer.set_visible(config.enabled);
     group.append(&revealer);
-    group.append(&crate::modules::battery::build(
+    let battery = crate::modules::battery::build(
         battery_config,
         battery_service,
         desktop_service,
         orientation,
-    ));
+    );
+    group.append(&battery);
 
     if config.enabled && config.reveal_on_hover {
         configure_hover_drawer(
             &group,
             &revealer,
-            [&temperature.button, &memory.button, &cpu.button],
+            &[&temperature.button, &memory.button, &cpu.button, &battery],
         );
     }
 
@@ -164,39 +165,55 @@ pub fn build(
 fn configure_hover_drawer(
     group: &gtk::Box,
     revealer: &gtk::Revealer,
-    buttons: [&gtk::MenuButton; 3],
+    buttons: &[&gtk::MenuButton],
 ) {
     let pointer_inside = Rc::new(Cell::new(false));
+    let menu_buttons = buttons
+        .iter()
+        .map(|button| (*button).clone())
+        .collect::<Vec<_>>();
     let motion = gtk::EventControllerMotion::new();
     let reveal = revealer.clone();
     let inside = pointer_inside.clone();
     motion.connect_enter(move |_, _, _| {
         inside.set(true);
-        reveal.set_reveal_child(true);
+        if !reveal.reveals_child() {
+            reveal.set_reveal_child(true);
+        }
     });
     let reveal = revealer.clone();
     let inside = pointer_inside.clone();
-    let menu_buttons = buttons
-        .iter()
-        .map(|button| (*button).clone())
-        .collect::<Vec<_>>();
+    let active_buttons = menu_buttons.clone();
     motion.connect_leave(move |_| {
         inside.set(false);
-        if !menu_buttons.iter().any(gtk::MenuButton::is_active) {
+        if should_collapse_drawer(
+            inside.get(),
+            active_buttons.iter().any(gtk::MenuButton::is_active),
+        ) && reveal.reveals_child()
+        {
             reveal.set_reveal_child(false);
         }
     });
     group.add_controller(motion);
 
-    for button in buttons {
+    for button in &menu_buttons {
         let reveal = revealer.clone();
         let inside = pointer_inside.clone();
-        button.connect_active_notify(move |button| {
-            if !button.is_active() && !inside.get() {
+        let active_buttons = menu_buttons.clone();
+        button.connect_active_notify(move |_| {
+            if should_collapse_drawer(
+                inside.get(),
+                active_buttons.iter().any(gtk::MenuButton::is_active),
+            ) && reveal.reveals_child()
+            {
                 reveal.set_reveal_child(false);
             }
         });
     }
+}
+
+fn should_collapse_drawer(pointer_inside: bool, popup_active: bool) -> bool {
+    !pointer_inside && !popup_active
 }
 
 fn metric(
@@ -397,5 +414,17 @@ fn temperature_icon(temperature: f64, icons: &[String]) -> Option<&str> {
         Some(icons.get(1).unwrap_or(&icons[0]))
     } else {
         Some(icons.get(2).unwrap_or_else(|| icons.last().unwrap()))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::should_collapse_drawer;
+
+    #[test]
+    fn drawer_collapses_only_when_idle() {
+        assert!(!should_collapse_drawer(false, true));
+        assert!(!should_collapse_drawer(true, false));
+        assert!(should_collapse_drawer(false, false));
     }
 }

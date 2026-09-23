@@ -263,12 +263,15 @@ impl BarManager {
                 self.services.volume.clone(),
                 orientation,
             )),
-            "battery" => Some(crate::modules::battery::build(
-                config.battery.clone(),
-                self.services.battery.clone(),
-                self.services.desktop.clone(),
-                orientation,
-            )),
+            "battery" => Some(
+                crate::modules::battery::build(
+                    config.battery.clone(),
+                    self.services.battery.clone(),
+                    self.services.desktop.clone(),
+                    orientation,
+                )
+                .upcast(),
+            ),
             "clock" => Some(crate::modules::clock::build(
                 config.clock.clone(),
                 orientation,

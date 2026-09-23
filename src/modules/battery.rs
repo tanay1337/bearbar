@@ -10,7 +10,7 @@ pub fn build(
     service: BatteryService,
     desktop: DesktopService,
     orientation: gtk::Orientation,
-) -> gtk::Widget {
+) -> gtk::MenuButton {
     if orientation == gtk::Orientation::Vertical {
         config.show_percentage = false;
     }
@@ -179,7 +179,7 @@ pub fn build(
         }
     });
 
-    button.upcast()
+    button
 }
 
 fn profile_button(label: &str, profile: &str, service: &DesktopService) -> gtk::ToggleButton {

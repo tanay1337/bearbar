@@ -4,114 +4,121 @@
 
 <h1 align="center">Bearbar</h1>
 
-A compact GTK4 bar for Hyprland, Niri, Sway, and KDE Plasma. Bearbar includes a
-small default theme, bundled symbolic icons, live configuration reload, and
-native compositor, audio, battery, and tray services.
+A compact, customizable GTK4 bar for Hyprland, Niri, Sway, and KDE Plasma.
+Ships with native compositor integration, bundled icons, polished popups, and
+live configuration reload.
+
+[Installation](#installation) · [Configuration](#configuration) ·
+[Modules](#modules) · [Starting Bearbar](#starting-bearbar)
+
+## Screenshots
+
+<table>
+<tr>
+<td colspan="2">
+
+**Overview**
+
+![Bearbar overview](https://i.imgur.com/DksqidY.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Control Center**
+
+![Bearbar control center](https://i.imgur.com/Mn0HQT1.png)
+
+</td>
+<td width="50%">
+
+**Battery**
+
+![Bearbar battery popup](https://i.imgur.com/bIM6WhA.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Volume**
+
+![Bearbar volume popup](https://i.imgur.com/6cSIhmA.png)
+
+</td>
+<td width="50%">
+
+**Calendar**
+
+![Bearbar calendar popup](https://i.imgur.com/6rcodRx.png)
+
+</td>
+</tr>
+</table>
+
+## Features
+
+- Native workspace integration for Hyprland, Niri, Sway, and KDE Plasma
+- Top, bottom, left, and right screen positions
+- Built-in control center, calendar, volume, battery, and hardware popups
+- StatusNotifier system tray and application launcher
+- Bundled symbolic SVG icons with optional custom glyphs
+- Live TOML and CSS reload without restarting the bar
+
+### Compositor support
+
+| Compositor | Status |
+|---|---|
+| Hyprland | Primary |
+| Niri | Supported |
+| Sway | Supported |
+| KDE Plasma | Supported |
+
+Hyprland is the most thoroughly tested integration. Reports and patches for the
+newer Niri, Sway, and KDE Plasma integrations are welcome.
 
 ## Installation
 
-Bearbar requires Rust 1.92+, GTK 4.12+, GTK4 Layer Shell, PulseAudio client
-libraries, UPower, and the GLib development tools.
+### Arch Linux
 
-Install the build and runtime dependencies on Arch Linux:
-
-```sh
-sudo pacman -S --needed base-devel rust gtk4 gtk4-layer-shell libpulse upower
-```
-
-On Ubuntu 26.04 or newer:
+Install the [AUR package](https://aur.archlinux.org/packages/bearbar-git):
 
 ```sh
-sudo apt install build-essential libglib2.0-dev libgtk-4-dev \
-  libgtk4-layer-shell-dev libpulse-dev pkg-config upower
+yay -S bearbar-git
 ```
 
-Ubuntu 24.04 provides the GTK4 Layer Shell runtime but not its development
-package. Install the remaining dependencies and build GTK4 Layer Shell first:
+### Building from source
 
-```sh
-sudo apt install build-essential libglib2.0-dev libgtk-4-dev libpulse-dev \
-  libwayland-dev meson ninja-build pkg-config upower wayland-protocols
-git clone --depth 1 --branch v1.3.0 \
-  https://github.com/wmww/gtk4-layer-shell.git
-meson setup gtk4-layer-shell/build gtk4-layer-shell --buildtype=release \
-  --prefix=/usr -Ddocs=false -Dexamples=false -Dintrospection=false \
-  -Dtests=false -Dvapi=false
-meson compile -C gtk4-layer-shell/build
-sudo meson install -C gtk4-layer-shell/build
-sudo ldconfig
-```
-
-Use [rustup](https://rustup.rs/) if your distribution does not provide Rust
-1.92 or newer. Then build and install Bearbar:
+Bearbar requires Rust 1.92+, GTK 4.12+, GTK4 Layer Shell 1+, GLib development
+tools, PulseAudio client libraries, and UPower.
 
 ```sh
 git clone https://github.com/tanay1337/bearbar.git
 cd bearbar
 cargo build --release --locked
 install -Dm755 target/release/bearbar ~/.local/bin/bearbar
-install -Dm644 examples/config.toml ~/.config/bearbar/config.toml
-install -Dm644 examples/style.css ~/.config/bearbar/style.css
 ```
 
-Optional integrations are enabled when their command is installed:
+Ubuntu 24.04 does not package the required GTK4 Layer Shell development files;
+build [GTK4 Layer Shell](https://github.com/wmww/gtk4-layer-shell) 1.x from
+source first.
 
-| Feature | Dependency |
-|---|---|
-| Wi-Fi | NetworkManager (`nmcli`) |
-| Bluetooth | BlueZ (`bluetoothctl`) |
-| Brightness | `brightnessctl` |
-| Power modes | `power-profiles-daemon` |
-| Media | `playerctl` and an MPRIS player |
-| Privacy indicators | PipeWire (`pw-dump`) |
-| Notifications | SwayNC (`swaync-client`) |
-| Clipboard | `cliphist` and `wl-clipboard` |
+## Configuration
 
-For PipeWire audio, its PulseAudio compatibility service must be running.
-`glib-compile-resources` is required while building and normally ships with the
-GLib development tools.
+Bearbar works with its built-in defaults. To customize it, create:
 
-### Start Bearbar
+- `~/.config/bearbar/config.toml` for layout and module options
+- `~/.config/bearbar/style.css` for appearance
 
-Start Bearbar directly from your compositor using the appropriate line:
-
-| Compositor | Configuration |
-|---|---|
-| Hyprland | `exec-once = bearbar` |
-| Niri | `spawn-at-startup "bearbar"` |
-| Sway | `exec bearbar` |
-| KDE Plasma | Add `~/.local/bin/bearbar` in **System Settings → Autostart** |
-
-Alternatively, install and enable the included user service:
-
-```sh
-install -Dm644 contrib/bearbar.service ~/.config/systemd/user/bearbar.service
-systemctl --user daemon-reload
-systemctl --user enable --now bearbar.service
-```
-
-Choose either compositor autostart or the user service, not both. Stop Waybar or
-any other panel reserving the same screen edge before starting Bearbar.
-
-Hyprland is the primary and most thoroughly tested compositor. Niri, Sway, and
-KDE Plasma support is newer; bug reports from those sessions are welcome.
-
-## Configure
-
-Bearbar reads `~/.config/bearbar/config.toml` and `style.css`. Both files reload
-when saved. Invalid TOML is rejected without replacing the active layout.
-
-```sh
-bearbar --check-config
-bearbar --config /path/to/config.toml --style /path/to/style.css
-```
-
-Modules are placed in the three layout lists:
+Example files live in [`examples/`](examples). AUR users can also find them in
+`/usr/share/doc/bearbar-git/examples/`. Both files reload automatically when
+saved; invalid TOML leaves the active layout untouched.
 
 ```toml
 [bar]
 position = "top" # top, bottom, left, or right
-height = 28       # bar thickness in logical pixels
+height = 28
 
 [modules]
 start = ["menu", "workspaces", "focused"]
@@ -119,46 +126,36 @@ center = ["media"]
 end = ["tray", "control_center", "hardware", "volume", "clock"]
 ```
 
-Bearbar uses bundled SVG icons when an icon setting is omitted. A configured
-glyph or text icon takes precedence, so Nerd Font and SF Symbol setups remain
-supported. [`examples/config.apple.toml`](examples/config.apple.toml) contains
-the optional Apple-style glyph configuration.
+Bundled SVG icons are used by default. Configured text or glyph icons take
+precedence; [`config.apple.toml`](examples/config.apple.toml) demonstrates the
+optional Apple-style setup.
+
+```sh
+bearbar --check-config
+bearbar --config /path/to/config.toml --style /path/to/style.css
+```
 
 ## Modules
 
-| Module | Purpose | Extra dependency |
-|---|---|---|
-| `workspaces` | Hyprland, Niri, Sway, or KDE Plasma workspaces | — |
-| `focused` | Focused application and title | — |
-| `launcher` | Search and focus open windows | — |
-| `menu` | Search installed desktop applications | — |
-| `tray` | StatusNotifier items and menus | — |
-| `clock` | Local time and calendar | — |
-| `volume` | Output level, mute, scroll, and popup | PulseAudio/PipeWire Pulse |
-| `battery` | Charge, health, remaining time, and power mode | UPower; power profiles optional |
-| `hardware` | Battery plus hover drawer for CPU, memory, and temperature | Linux `/proc` and `/sys` |
-| `control_center` | Wi-Fi, Bluetooth, brightness, sound, and idle inhibition | Integration commands above |
-| `media` | Current track and playback controls | `playerctl` |
-| `privacy` | Active microphone, camera, or screen capture | `pw-dump` |
-| `notifications` | SwayNC count and panel toggle | `swaync-client` |
-| `clipboard` | Search and restore clipboard history | `cliphist`, `wl-copy` |
-| `keyboard` | Current compositor keyboard layout | — |
-| `submap` | Current Hyprland submap | — |
-| `inhibit` | Standalone idle inhibitor toggle | `systemd-inhibit` |
-| `custom:name` | Periodic command output with an optional click action | User command |
+- **Compositor** — `workspaces`, `focused`, `keyboard`, `submap`
+- **Desktop** — `menu`, `launcher`, `tray`, `clock`, `control_center`
+- **System** — `battery`, `hardware`, `volume`, `privacy`, `inhibit`
+- **Workflow** — `media`, `notifications`, `clipboard`, `custom:name`
 
-Niri workspaces follow Niri's dynamic workspace model. KDE virtual desktops are
-global rather than per-output. The `persistent` list is used by Hyprland and
-Sway, and ignored by Niri and KDE.
+Optional integrations use standard desktop tools when installed:
 
-The compositor is detected from its session environment. Set
-`BEARBAR_COMPOSITOR` to `hyprland`, `niri`, `sway`, or `kde` to override
-auto-detection.
+| Integration | Dependency |
+|---|---|
+| Wi-Fi | NetworkManager (`nmcli`) |
+| Bluetooth | BlueZ (`bluetoothctl`) |
+| Brightness | `brightnessctl` |
+| Power modes | `power-profiles-daemon` |
+| Media | `playerctl` |
+| Privacy indicators | PipeWire (`pw-dump`) |
+| Notifications | SwayNC (`swaync-client`) |
+| Clipboard | `cliphist` and `wl-clipboard` |
 
-Left and right bars use compact summaries: workspaces and tray items stack,
-metric percentages collapse to icons, and the clock uses a two-line time.
-
-## Custom modules
+Custom modules run periodic shell commands and can define a click action:
 
 ```toml
 [custom.weather]
@@ -167,10 +164,27 @@ interval_secs = 900
 on_click = "xdg-open https://example.com/weather"
 ```
 
-Use `custom:weather` in a layout list to display it.
+Use `custom:weather` in a module list. Custom commands are executable code, so
+only use configurations you trust.
 
-Custom module commands and click actions run through the user's shell. Treat
-configuration files as executable code and only use commands you trust.
+## Starting Bearbar
+
+| Compositor | Configuration |
+|---|---|
+| Hyprland | `exec-once = bearbar` |
+| Niri | `spawn-at-startup "bearbar"` |
+| Sway | `exec bearbar` |
+| KDE Plasma | Add `bearbar` in **System Settings → Autostart** |
+
+The AUR package also installs a user service:
+
+```sh
+systemctl --user enable --now bearbar.service
+```
+
+Choose one startup method and stop any other panel reserving the same screen
+edge. Set `BEARBAR_COMPOSITOR` to `hyprland`, `niri`, `sway`, or `kde` to
+override automatic compositor detection.
 
 ## License
 
