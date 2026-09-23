@@ -15,15 +15,6 @@ live configuration reload.
 
 <table>
 <tr>
-<td colspan="2">
-
-**Overview**
-
-![Bearbar overview](https://i.imgur.com/DksqidY.png)
-
-</td>
-</tr>
-<tr>
 <td width="50%">
 
 **Control Center**
